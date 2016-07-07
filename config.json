@@ -1,0 +1,36 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+
+    "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
+
+    "platforms": [],
+
+    "accessories": [{
+        "accessory": "RealFakeGarageDoorsAccessory",
+        "name": "My Real Fake Front Garage Door",
+        "host": "localhost",
+        "port": 3893,
+        "key": "wubbalubbadubdub",
+        "openCommand": 1,
+        "closeAfter": 28,
+        "simulateTimeOpening": 13,
+        "simulateTimeOpen": 15,
+        "simulateTimeClosing": 12
+    }, {
+        "accessory": "RealFakeGarageDoorsAccessory",
+        "name": "My Real Fake Rear Garage Door",
+        "host": "localhost",
+        "port": 3893,
+        "key": "wubbalubbadubdub",
+        "openCommand": 2,
+        "closeAfter": 21,
+        "simulateTimeOpening": 13,
+        "simulateTimeOpen": 8,
+        "simulateTimeClosing": 12
+    }]
+}

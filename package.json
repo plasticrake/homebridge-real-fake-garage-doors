@@ -1,0 +1,33 @@
+{
+  "name": "homebridge-real-fake-garage-doors",
+  "version": "1.0.0",
+  "description": "Garage Door plugin for Homebridge",
+  "author": "Patrick Seal",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/plasticrake/homebridge-real-fake-garage-doors.git"
+  },
+  "bugs": {
+    "url": "https://github.com/plasticrake/homebridge-real-fake-garage-doors/issues",
+    "email": "code@plasticrake.com"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "garage",
+    "garagedoor"
+  ],
+  "engines": {
+    "node": ">4.0.0",
+    "homebridge": ">=0.3.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^3.0.1"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "debug": "DEBUG=* homebridge --debug --plugin-path ."
+  }
+}
