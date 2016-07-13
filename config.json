@@ -11,7 +11,7 @@
     "platforms": [],
 
     "accessories": [{
-        "accessory": "RealFakeGarageDoorsAccessory",
+        "accessory": "RealFakeGarageDoors",
         "name": "My Real Fake Front Garage Door",
         "host": "localhost",
         "port": 3893,
@@ -22,7 +22,7 @@
         "simulateTimeOpen": 15,
         "simulateTimeClosing": 12
     }, {
-        "accessory": "RealFakeGarageDoorsAccessory",
+        "accessory": "RealFakeGarageDoors",
         "name": "My Real Fake Rear Garage Door",
         "host": "localhost",
         "port": 3893,

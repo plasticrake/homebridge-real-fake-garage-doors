@@ -9,7 +9,7 @@ module.exports = function (homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
 
-  homebridge.registerAccessory('homebridge-real-fake-garage-doors', 'RealFakeGarageDoorsAccessory', RealFakeGarageDoorsAccessory);
+  homebridge.registerAccessory('homebridge-real-fake-garage-doors', 'RealFakeGarageDoors', RealFakeGarageDoorsAccessory);
 };
 
 function RealFakeGarageDoorsAccessory (log, config) {
