@@ -12,37 +12,37 @@ module.exports = function (homebridge) {
   homebridge.registerAccessory('homebridge-real-fake-garage-doors', 'RealFakeGarageDoors', RealFakeGarageDoorsAccessory);
 };
 
-function RealFakeGarageDoorsAccessory (log, config) {
-  this.log = log;
+class RealFakeGarageDoorsAccessory {
+  constructor (log, config) {
+    this.log = log;
 
-  this.host = config['host'];
-  this.port = config['port'];
-  this.key = config['key'];
+    this.host = config['host'];
+    this.port = config['port'];
+    this.key = config['key'];
 
-  this.openCommand = config['openCommand'];
-  this.closeAfter = config['closeAfter'];
-  this.lastOpened = new Date();
+    this.openCommand = config['openCommand'];
+    this.closeAfter = config['closeAfter'];
+    this.lastOpened = new Date();
 
-  this.simulateTimeOpening = config['simulateTimeOpening'];
-  this.simulateTimeOpen = config['simulateTimeOpen'];
-  this.simulateTimeClosing = config['simulateTimeClosing'];
+    this.simulateTimeOpening = config['simulateTimeOpening'];
+    this.simulateTimeOpen = config['simulateTimeOpen'];
+    this.simulateTimeClosing = config['simulateTimeClosing'];
 
-  this.service = new Service.GarageDoorOpener(config['name'], config['name']);
-  this.setupGarageDoorOpenerService(this.service);
+    this.service = new Service.GarageDoorOpener(config['name'], config['name']);
+    this.setupGarageDoorOpenerService(this.service);
 
-  this.informationService = new Service.AccessoryInformation();
-  this.informationService
-    .setCharacteristic(Characteristic.Manufacturer, 'Plumbus & Kimble Inc.')
-    .setCharacteristic(Characteristic.Model, 'Interdimensional Remote')
-    .setCharacteristic(Characteristic.SerialNumber, 'C-137');
-}
+    this.informationService = new Service.AccessoryInformation();
+    this.informationService
+      .setCharacteristic(Characteristic.Manufacturer, 'Plumbus & Kimble Inc.')
+      .setCharacteristic(Characteristic.Model, 'Interdimensional Remote')
+      .setCharacteristic(Characteristic.SerialNumber, 'C-137');
+  }
 
-RealFakeGarageDoorsAccessory.prototype = {
-  getServices: function () {
+  getServices () {
     return [this.informationService, this.service];
-  },
+  }
 
-  setupGarageDoorOpenerService: function (service) {
+  setupGarageDoorOpenerService (service) {
     this.service.setCharacteristic(Characteristic.TargetDoorState, Characteristic.TargetDoorState.CLOSED);
     this.service.setCharacteristic(Characteristic.CurrentDoorState, Characteristic.CurrentDoorState.CLOSED);
 
@@ -73,9 +73,9 @@ RealFakeGarageDoorsAccessory.prototype = {
           callback();
         }
       });
-  },
+  }
 
-  openDoor: function (callback) {
+  openDoor (callback) {
     var client = this.sendCommand(this.openCommand);
     var callbackCalled = false;
 
@@ -98,9 +98,9 @@ RealFakeGarageDoorsAccessory.prototype = {
         callback(err);
       }
     });
-  },
+  }
 
-  sendCommand: function (command) {
+  sendCommand (command) {
     const hmac = crypto.createHmac('sha256', this.key);
     var client = new net.Socket();
     client.connect(this.port, this.host, () => {
@@ -114,9 +114,9 @@ RealFakeGarageDoorsAccessory.prototype = {
       this.log(err);
     });
     return client;
-  },
+  }
 
-  simulateDoorOpening: function () {
+  simulateDoorOpening () {
     this.service.setCharacteristic(Characteristic.CurrentDoorState, Characteristic.CurrentDoorState.OPENING);
     setTimeout(() => {
       this.service.setCharacteristic(Characteristic.CurrentDoorState, Characteristic.CurrentDoorState.OPEN);
@@ -129,5 +129,4 @@ RealFakeGarageDoorsAccessory.prototype = {
       }, this.simulateTimeOpen * 1000);
     }, this.simulateTimeOpening * 1000);
   }
-
-};
+}
