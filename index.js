@@ -49,8 +49,8 @@ RealFakeGarageDoorsAccessory.prototype = {
     service.getCharacteristic(Characteristic.TargetDoorState)
       .on('get', (callback) => {
         var tds = service.getCharacteristic(Characteristic.TargetDoorState).value;
-        if (tds === Characteristic.TargetDoorState.OPEN
-          && (((new Date()) - this.lastOpened) >= (this.closeAfter * 1000))) {
+        if (tds === Characteristic.TargetDoorState.OPEN &&
+          (((new Date()) - this.lastOpened) >= (this.closeAfter * 1000))) {
           this.log('Setting TargetDoorState to CLOSED');
           callback(null, Characteristic.TargetDoorState.CLOSED);
         } else {
@@ -77,21 +77,26 @@ RealFakeGarageDoorsAccessory.prototype = {
 
   openDoor: function (callback) {
     var client = this.sendCommand(this.openCommand);
+    var callbackCalled = false;
+
     client.on('data', (data) => {
       client.end();
-      this.log('data [' + data + '] [' + this.openCommand + ']');
-      if (+data === this.openCommand) {
+      var dataString = data.toString('ascii');
+      if (+dataString === +this.openCommand) {
         this.log('Opening door!');
         this.simulateDoorOpening();
+        callbackCalled = true;
         callback();
       } else {
-        this.log('Could not open door!');
-        callback('Could not open door!');
+        this.log('Could not open door! Response: %s', data);
+        callbackCalled = true;
+        callback(new Error('Could not open door! Response: ' + data));
       }
     });
     client.on('error', (err) => {
-      this.log(err);
-      callback(err);
+      if (!callbackCalled) {
+        callback(err);
+      }
     });
   },
 
@@ -99,12 +104,14 @@ RealFakeGarageDoorsAccessory.prototype = {
     const hmac = crypto.createHmac('sha256', this.key);
     var client = new net.Socket();
     client.connect(this.port, this.host, () => {
-      this.log('CONNECT');
-      var epochTime = Math.floor((new Date).getTime() / 1000);
-      this.log('epochTime ' + epochTime);
+      var epochTime = Math.floor((new Date()).getTime() / 1000);
       hmac.update(epochTime + '', 'ascii');
       client.write(hmac.digest());
-      client.write(Buffer.from([command]));
+      client.write(new Buffer([command]));
+    });
+    client.on('error', (err) => {
+      client.end();
+      this.log(err);
     });
     return client;
   },
